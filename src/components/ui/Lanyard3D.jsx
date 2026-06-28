@@ -123,8 +123,8 @@ function Band({
   const texture = useTexture(lanyardImage || lanyard);
   // useTexture must be called unconditionally; use a blank pixel when an image
   // isn't supplied for a given face, then skip compositing it below.
-  const frontTex = useTexture(frontImage || BLANK_PIXEL);
-  const backTex = useTexture(backImage || BLANK_PIXEL);
+  const frontTex = useTexture(frontImage && typeof frontImage === 'string' ? frontImage : BLANK_PIXEL);
+  const backTex = useTexture(backImage && typeof backImage === 'string' ? backImage : BLANK_PIXEL);
 
   // Composite the front/back images into the card's texture atlas (front = left
   // half, back = right half). Each image is drawn aspect-preserving (no stretch).
@@ -162,8 +162,14 @@ function Band({
       ctx.restore();
     };
 
-    if (frontImage && frontTex.image) drawFitted(frontTex.image, FRONT_UV_RECT);
-    if (backImage && backTex.image) drawFitted(backTex.image, BACK_UV_RECT);
+    if (frontImage) {
+      const imgSource = typeof frontImage === 'string' ? frontTex.image : frontImage;
+      if (imgSource) drawFitted(imgSource, FRONT_UV_RECT);
+    }
+    if (backImage) {
+      const imgSource = typeof backImage === 'string' ? backTex.image : backImage;
+      if (imgSource) drawFitted(imgSource, BACK_UV_RECT);
+    }
 
     const composite = new THREE.CanvasTexture(canvas);
     composite.colorSpace = THREE.SRGBColorSpace;

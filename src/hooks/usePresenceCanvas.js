@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export function usePresenceCanvas(lanyardData) {
-  const [textureUrl, setTextureUrl] = useState(null);
+  const [canvasElement, setCanvasElement] = useState(null);
 
   useEffect(() => {
     if (!lanyardData) return;
@@ -226,12 +226,12 @@ export function usePresenceCanvas(lanyardData) {
       ctx.fillRect(435, 705, 10, 10);
       ctx.fillRect(445, 715, 10, 10);
 
-      // Output texture as PNG Data URL
-      setTextureUrl(canvas.toDataURL('image/png'));
+      // Output texture as HTML Canvas Element directly
+      setCanvasElement(canvas);
     };
 
     drawCard();
   }, [lanyardData]);
 
-  return textureUrl;
+  return canvasElement;
 }
