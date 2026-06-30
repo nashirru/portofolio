@@ -1,50 +1,62 @@
 import { motion } from 'framer-motion';
 
-export default function SplitText({ text, className = "", delay = 0, duration = 0.5, stagger = 0.06 }) {
-  const words = text.split(" ");
+/**
+ * SplitText — Word-by-word staggered reveal animation.
+ * Each word rises from below with a slight rotate, using a snappy
+ * cubic-bezier curve that fits the brutalist aesthetic.
+ */
+export default function SplitText({
+  text,
+  className = '',
+  delay = 0,
+  stagger = 0.08,
+  duration = 0.5,
+  wordClassName = '',
+}) {
+  const words = text.split(' ');
 
   const containerVariants = {
     hidden: {},
     visible: {
       transition: {
         staggerChildren: stagger,
-        delayChildren: delay
-      }
-    }
+        delayChildren: delay,
+      },
+    },
   };
 
   const wordVariants = {
-    hidden: { 
-      y: "115%",
-      opacity: 0
-    },
-    visible: { 
+    hidden: { y: '110%', rotateZ: 5, opacity: 0 },
+    visible: {
       y: 0,
+      rotateZ: 0,
       opacity: 1,
-      transition: { 
-        duration: duration, 
-        ease: [0.16, 1, 0.3, 1] // easeOutExpo
-      }
-    }
+      transition: {
+        duration,
+        ease: [0.76, 0, 0.24, 1],
+      },
+    },
   };
 
   return (
-    <motion.span 
-      className={`inline-flex flex-wrap ${className}`}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {words.map((word, index) => (
-        <span key={index} className="inline-block overflow-hidden mr-[0.25em] py-[0.05em]">
-          <motion.span
-            className="inline-block"
-            variants={wordVariants}
+    <span className={`inline-flex flex-wrap ${className}`}>
+      <motion.span
+        className="inline-flex flex-wrap"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {words.map((word, index) => (
+          <span
+            key={index}
+            className={`inline-block overflow-hidden mr-[0.3em] last:mr-0 ${wordClassName}`}
           >
-            {word === "" ? "\u00A0" : word}
-          </motion.span>
-        </span>
-      ))}
-    </motion.span>
+            <motion.span className="inline-block" variants={wordVariants}>
+              {word}
+            </motion.span>
+          </span>
+        ))}
+      </motion.span>
+    </span>
   );
 }

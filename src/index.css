@@ -1,108 +1,177 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --color-bg-base: #09090B;
-    --color-accent-cyan: #06B6D4;
-    --color-accent-purple: #8B5CF6;
-    --color-text-primary: #FAFAFA;
-    --color-text-secondary: #A1A1AA;
-    
-    --color-glass-fill: rgba(25, 25, 30, 0.4);
-    --color-glass-border: rgba(255, 255, 255, 0.08);
-    --color-glass-hover: rgba(255, 255, 255, 0.15);
-    
-    --radius-full: 999px;
-    --radius-md: 12px;
-    --radius-xl: 24px;
-    --radius-2xl: 32px;
-  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
 
-  html {
-    scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
   body {
-    background-color: var(--color-bg-base);
-    color: var(--color-text-primary);
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-    @apply antialiased selection:bg-accent-cyan/20 selection:text-accent-cyan;
-    margin: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #F5F5F5;
+    color: #0A0A0A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-}
 
-/* Custom modern scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+  ::selection { background: #FFE600; color: #0A0A0A; }
 
-::-webkit-scrollbar-track {
-  background: var(--color-bg-base);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-glass-border);
-  border-radius: var(--radius-full);
-  border: 2px solid var(--color-bg-base);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-glass-hover);
-}
-
-/* Aurora / Float Background Animations */
-@keyframes aurora-float-1 {
-  0%, 100% {
-    transform: translate(0px, 0px) scale(1);
+  :focus-visible {
+    outline: 2px solid #FF3366;
+    outline-offset: 2px;
   }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.95);
-  }
-}
 
-@keyframes aurora-float-2 {
-  0%, 100% {
-    transform: translate(0px, 0px) scale(1.05);
-  }
-  50% {
-    transform: translate(-40px, 40px) scale(0.9);
-  }
-}
+  :focus:not(:focus-visible) { outline: none; }
 
-.animate-aurora-1 {
-  animation: aurora-float-1 12s ease-in-out infinite;
-}
-
-.animate-aurora-2 {
-  animation: aurora-float-2 15s ease-in-out infinite;
-}
-
-/* Marquee / Infinite Horizontal Scroll */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
     transform: translateX(-50%);
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    background: #FF3366;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: top 0.2s;
   }
+  .skip-link:focus { top: 0; }
+}
+
+@layer utilities {
+  /* Primary dot-grid background — used in App.jsx bg layer */
+  .bg-dot-grid {
+    background-image: radial-gradient(circle, #0A0A0A 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+  }
+
+  /* Dense dot grid for darker sections */
+  .bg-dot-grid-dense {
+    background-image: radial-gradient(circle, #0A0A0A 0.7px, transparent 0.7px);
+    background-size: 16px 16px;
+  }
+
+  /* Sparse dot overlay */
+  .bg-dot-grid-sparse {
+    background-image: radial-gradient(circle, #FFE600 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.12;
+  }
+
+  /* Vertical Swiss grid lines */
+  .bg-grid-lines {
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 79px,
+      rgba(0,0,0,0.04) 79px,
+      rgba(0,0,0,0.04) 80px
+    );
+  }
+
+  /* Horizontal structural lines */
+  .bg-h-lines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 119px,
+      rgba(0,0,0,0.03) 119px,
+      rgba(0,0,0,0.03) 120px
+    );
+  }
+
+  /* Combined Swiss grid */
+  .bg-swiss-grid {
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 79px,
+        rgba(0,0,0,0.04) 79px,
+        rgba(0,0,0,0.04) 80px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 119px,
+        rgba(0,0,0,0.03) 119px,
+        rgba(0,0,0,0.03) 120px
+      );
+  }
+
+  /* Noise texture overlay */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+  }
+
+  /* Spring ease curve — matches framer-motion spring defaults */
+  .ease-spring {
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Smooth ease-out-expo */
+  .ease-expo-out {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Yellow glow accent */
+  .glow-yellow {
+    box-shadow: 0 0 20px rgba(255, 230, 0, 0.15);
+  }
+  .group:hover .glow-yellow {
+    box-shadow: 0 0 30px rgba(255, 230, 0, 0.25);
+  }
+}
+
+/* ----- Marquee Keyframes ----- */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 25s linear infinite;
+  animation: marquee 20s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
+/* ----- Reduced Motion ----- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbar styling for content area */
+.main-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.main-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.main-scroll::-webkit-scrollbar-thumb {
+  background: #0A0A0A;
+  border-radius: 0;
+}

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muhammad Abdun Nasir · Backend & Frontend Architect</title>
+
+  <!-- Google Fonts: Playfair Display (sharp serif) + Inter (clean sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config Override -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#FAF9F6',
+            ink: '#1C1917',
+            'ink-muted': '#78716C',
+            'ink-light': '#D6D3D1',
+            'accent-red': '#DC2626',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          fontSize: {
+            'display-xl': ['5rem', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
+            'display-lg': ['4rem', { lineHeight: '1', letterSpacing: '-0.02em' }],
+            'display-md': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+          },
+          spacing: {
+            'section': '7rem',
+            'section-mobile': '4rem',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Base reset & editorial polish */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #FAF9F6;
+      color: #1C1917;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    img { max-width: 100%; display: block; }
+
+    /* Selection */
+    ::selection { background: #DC2626; color: #FAF9F6; }
+
+    /* Focus ring */
+    :focus-visible {
+      outline: 2px solid #DC2626;
+      outline-offset: 2px;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      padding: 0.5rem 1rem;
+      background: #DC2626;
+      color: #FAF9F6;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Marquee animation */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .animate-marquee:hover { animation-play-state: paused; }
+
+    /* Subtle hover lift for project links */
+    .project-link {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .project-link:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 0 #1C1917;
+    }
+
+    /* Responsive display text */
+    @media (max-width: 640px) {
+      .display-responsive {
+        font-size: 2.75rem;
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+    }
+    @media (min-width: 641px) and (max-width: 1023px) {
+      .display-responsive {
+        font-size: 3.75rem;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+      }
+    }
+    @media (min-width: 1024px) {
+      .display-responsive {
+        font-size: 5rem;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Skip Link -->
+  <a href="#work" class="skip-link">Skip to content</a>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header
+    class="sticky top-0 z-50 bg-paper/90 backdrop-blur-sm border-b-2 border-ink"
+  >
+    <div class="max-w-[1200px] mx-auto px-6 sm:px-10 h-16 sm:h-20 flex items-center justify-between">
+      <!-- Logo / Name -->
+      <a href="#" class="font-display text-xl sm:text-2xl font-bold text-ink tracking-tight">
+        Nasir
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden sm:flex items-center gap-8 text-sm font-medium">
+        <a href="#work" class="text-ink-muted hover:text-ink transition-colors">Work</a>
+        <a href="#about" class="text-ink-muted hover:text-ink transition-colors">About</a>
+        <a href="#contact" class="text-ink-muted hover:text-ink transition-colors">Contact</a>
+        <a href="#contact"
+          class="ml-2 px-4 py-2 border-2 border-ink text-ink text-sm font-semibold hover:bg-ink hover:text-paper transition-colors"
+        >
+          Hire Me
+        </a>
+      </nav>
+
+      <!-- Mobile Menu Button (simple anchor) -->
+      <a href="#mobile-nav"
+        class="sm:hidden p-2 border-2 border-ink"
+        aria-label="Navigation menu"
+        onclick="document.getElementById('mobile-nav').classList.toggle('hidden')"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1C1917" stroke-width="2">
+          <path d="M3 5h14M3 10h14M3 15h14"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Mobile Nav Drawer -->
+    <div id="mobile-nav" class="hidden sm:hidden border-t-2 border-ink bg-paper">
+      <div class="px-6 py-6 flex flex-col gap-4">
+        <a href="#work" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="text-lg font-semibold text-ink hover:text-accent-red py-2 border-b border-ink/10">
+          Work
+        </a>
+        <a href="#about" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="text-lg font-semibold text-ink hover:text-accent-red py-2 border-b border-ink/10">
+          About
+        </a>
+        <a href="#contact" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="text-lg font-semibold text-ink hover:text-accent-red py-2 border-b border-ink/10">
+          Contact
+        </a>
+        <a href="#contact" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="mt-2 w-full text-center py-3 border-2 border-ink text-ink font-semibold hover:bg-ink hover:text-paper transition-colors">
+          Hire Me
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="max-w-[1200px] mx-auto px-6 sm:px-10 pt-16 sm:pt-24 pb-section-mobile sm:pb-section">
+
+      <!-- Eyebrow -->
+      <p class="font-sans text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase text-accent-red mb-6 sm:mb-8">
+        Backend &amp; Frontend Architect
+      </p>
+
+      <!-- Massive Headline -->
+      <h1 class="font-display font-bold display-responsive text-ink max-w-4xl">
+        Building Digital<br />
+        <span class="italic text-accent-red">Infrastructure</span>
+      </h1>
+
+      <!-- Description -->
+      <div class="mt-8 sm:mt-10 max-w-2xl">
+        <p class="text-base sm:text-lg text-ink-muted leading-relaxed font-sans">
+          I architect and build full-stack web applications — from robust Laravel APIs to
+          polished React interfaces. I focus on clean architecture, maintainable code, and
+          experiences that feel intentional.
+        </p>
+      </div>
+
+      <!-- CTA + Availability -->
+      <div class="mt-10 sm:mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-10">
+        <a href="#work"
+          class="inline-flex items-center gap-2 px-6 py-3.5 border-2 border-ink bg-ink text-paper font-semibold text-sm hover:bg-paper hover:text-ink transition-colors"
+        >
+          View Selected Work
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 3l5 5-5 5"/>
+          </svg>
+        </a>
+        <span class="flex items-center gap-2 text-xs sm:text-sm text-ink-muted font-medium">
+          <span class="w-2 h-2 rounded-full bg-accent-red"></span>
+          Available for freelance projects
+        </span>
+      </div>
+    </section>
+
+    <!-- ==================== WORK / PROJECTS ==================== -->
+    <section id="work" class="max-w-[1200px] mx-auto px-6 sm:px-10 pb-section-mobile sm:pb-section">
+
+      <!-- Section Header -->
+      <div class="flex items-center gap-4 mb-10 sm:mb-14">
+        <span class="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-accent-red">01</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink">Selected Work</h2>
+        <div class="flex-1 border-t border-ink/20"></div>
+      </div>
+
+      <!-- Projects Grid: Asymmetrical Bento -->
+      <!-- Row 1: 2 columns (wider left, narrower right) -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 mb-5 sm:mb-6">
+
+        <!-- Project 1: Cashflow Dashboard (wider) -->
+        <article class="sm:col-span-7 border-2 border-ink bg-white p-6 sm:p-8 project-link">
+          <div class="flex flex-col h-full justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <h3 class="font-display text-xl sm:text-2xl font-bold text-ink leading-tight">
+                  Warok Cashflow<br />Dashboard
+                </h3>
+                <span class="shrink-0 font-sans text-xs font-semibold tracking-wider text-accent-red uppercase">SaaS</span>
+              </div>
+              <p class="text-sm sm:text-base text-ink-muted leading-relaxed mb-6 font-sans">
+                Financial management SaaS for SMEs. Real-time cash flow monitoring with
+                interactive data visualization. Handles 500+ transactions monthly with
+                automated reconciliation.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Laravel</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">React</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">MySQL</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Tailwind</span>
+              <a href="#" class="ml-auto font-sans text-xs font-semibold text-accent-red hover:text-ink transition-colors">
+                View →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2: Absen Portal (narrower) -->
+        <article class="sm:col-span-5 border-2 border-ink bg-white p-6 sm:p-8 project-link">
+          <div class="flex flex-col h-full justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <h3 class="font-display text-xl sm:text-2xl font-bold text-ink leading-tight">
+                  ASA Absen<br />Portal
+                </h3>
+                <span class="shrink-0 font-sans text-xs font-semibold tracking-wider text-accent-red uppercase">Enterprise</span>
+              </div>
+              <p class="text-sm sm:text-base text-ink-muted leading-relaxed mb-6 font-sans">
+                Geolocation-based attendance with dynamic QR code validation. Processes
+                1,000+ daily check-ins across multiple locations with anti-spoofing detection.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Laravel</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">PHP</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">MySQL</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Tailwind</span>
+              <a href="#" class="ml-auto font-sans text-xs font-semibold text-accent-red hover:text-ink transition-colors">
+                View →
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Row 2: 2 columns (narrower left, wider right) -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6">
+
+        <!-- Project 3: PNOM CMS (narrower) -->
+        <article class="sm:col-span-5 border-2 border-ink bg-white p-6 sm:p-8 project-link">
+          <div class="flex flex-col h-full justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <h3 class="font-display text-xl sm:text-2xl font-bold text-ink leading-tight">
+                  PNOM CMS<br />Gallery
+                </h3>
+                <span class="shrink-0 font-sans text-xs font-semibold tracking-wider text-accent-red uppercase">CMS</span>
+              </div>
+              <p class="text-sm sm:text-base text-ink-muted leading-relaxed mb-6 font-sans">
+                Content management system with interactive gallery for graphic designers.
+                Dynamic media integration with drag-and-drop organization.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">React</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Vite</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Framer</span>
+              <span class="px-3 py-1 text-xs font-medium border border-ink/20 text-ink-muted">Tailwind</span>
+              <a href="#" class="ml-auto font-sans text-xs font-semibold text-accent-red hover:text-ink transition-colors">
+                View →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 4: Call-to-action placeholder (wider) -->
+        <article class="sm:col-span-7 border-2 border-ink bg-ink p-6 sm:p-8 project-link flex items-center"
+          style="box-shadow: none;">
+          <div class="w-full text-center sm:text-left">
+            <p class="font-display text-xl sm:text-2xl font-bold text-paper mb-3">
+              Have a project in mind?
+            </p>
+            <p class="text-sm sm:text-base text-ink-light/70 mb-6 font-sans max-w-md mx-auto sm:mx-0">
+              I'm currently available for freelance work and collaborations. Let's build something together.
+            </p>
+            <a href="#contact"
+              class="inline-flex items-center gap-2 px-5 py-3 border-2 border-paper text-paper font-semibold text-sm hover:bg-paper hover:text-ink transition-colors"
+            >
+              Start a Conversation
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 2l5 5-5 5"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT / SKILLS ==================== -->
+    <section id="about" class="max-w-[1200px] mx-auto px-6 sm:px-10 pb-section-mobile sm:pb-section">
+
+      <!-- Section Header -->
+      <div class="flex items-center gap-4 mb-10 sm:mb-14">
+        <span class="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-accent-red">02</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink">About &amp; Stack</h2>
+        <div class="flex-1 border-t border-ink/20"></div>
+      </div>
+
+      <!-- Bio + Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-8 sm:gap-12 mb-12 sm:mb-16">
+        <!-- Left: Bio -->
+        <div class="sm:col-span-7">
+          <p class="font-display text-xl sm:text-2xl font-bold text-ink leading-snug mb-6">
+            I'm Muhammad Abdun Nasir — a full-stack developer who bridges the gap between
+            <span class="text-accent-red">backend architecture</span> and
+            frontend craftsmanship.
+          </p>
+          <div class="space-y-4 text-sm sm:text-base text-ink-muted leading-relaxed font-sans">
+            <p>
+              With deep expertise in Laravel and React, I build systems that are both
+              technically robust and a pleasure to use. I specialize in RESTful API design,
+              database architecture, and building interfaces that don't get in the way.
+            </p>
+            <p>
+              Every project gets the same treatment: clean code, thoughtful architecture,
+              and an obsessive attention to detail. I don't cut corners — I ship work
+              I'm proud to put my name on.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Quick facts -->
+        <div class="sm:col-span-4 sm:col-start-9 border-t-2 sm:border-t-0 sm:border-l-2 border-ink/20 pt-6 sm:pt-0 sm:pl-8">
+          <h3 class="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-accent-red mb-5">Quick Facts</h3>
+          <dl class="space-y-5">
+            <div>
+              <dt class="font-sans text-xs font-semibold text-ink/60 uppercase tracking-wider">Experience</dt>
+              <dd class="font-display text-2xl font-bold text-ink mt-1">5+ Years</dd>
+            </div>
+            <div>
+              <dt class="font-sans text-xs font-semibold text-ink/60 uppercase tracking-wider">Projects</dt>
+              <dd class="font-display text-2xl font-bold text-ink mt-1">20+ Shipped</dd>
+            </div>
+            <div>
+              <dt class="font-sans text-xs font-semibold text-ink/60 uppercase tracking-wider">Focus</dt>
+              <dd class="font-display text-lg font-bold text-ink mt-1">Full-Stack Web</dd>
+            </div>
+            <div>
+              <dt class="font-sans text-xs font-semibold text-ink/60 uppercase tracking-wider">Location</dt>
+              <dd class="font-sans text-base font-medium text-ink mt-1">Jawa Timur, Indonesia</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Skills Marquee -->
+      <div class="border-t-2 border-b-2 border-ink py-5 overflow-hidden">
+        <div class="animate-marquee">
+          <div class="flex items-center gap-12 sm:gap-16 text-sm sm:text-base font-sans font-semibold text-ink-muted uppercase tracking-[0.15em]">
+            <span>Laravel</span>
+            <span class="text-accent-red">●</span>
+            <span>PHP</span>
+            <span class="text-accent-red">●</span>
+            <span>React</span>
+            <span class="text-accent-red">●</span>
+            <span>Tailwind CSS</span>
+            <span class="text-accent-red">●</span>
+            <span>Next.js</span>
+            <span class="text-accent-red">●</span>
+            <span>MySQL</span>
+            <span class="text-accent-red">●</span>
+            <span>Node.js</span>
+            <span class="text-accent-red">●</span>
+            <span>TypeScript</span>
+            <span class="text-accent-red">●</span>
+            <span>Git</span>
+            <span class="text-accent-red">●</span>
+            <span>Framer Motion</span>
+            <span class="text-accent-red">●</span>
+            <span>Vite</span>
+            <span class="text-accent-red">●</span>
+            <span>Postman</span>
+            <span class="text-accent-red">●</span>
+            <span>Laravel</span>
+            <span class="text-accent-red">●</span>
+            <span>PHP</span>
+            <span class="text-accent-red">●</span>
+            <span>React</span>
+            <span class="text-accent-red">●</span>
+            <span>Tailwind CSS</span>
+            <span class="text-accent-red">●</span>
+            <span>Next.js</span>
+            <span class="text-accent-red">●</span>
+            <span>MySQL</span>
+            <span class="text-accent-red">●</span>
+            <span>Node.js</span>
+            <span class="text-accent-red">●</span>
+            <span>TypeScript</span>
+            <span class="text-accent-red">●</span>
+            <span>Git</span>
+            <span class="text-accent-red">●</span>
+            <span>Framer Motion</span>
+            <span class="text-accent-red">●</span>
+            <span>Vite</span>
+            <span class="text-accent-red">●</span>
+            <span>Postman</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT / FOOTER ==================== -->
+    <section id="contact" class="max-w-[1200px] mx-auto px-6 sm:px-10 pb-section-mobile sm:pb-section">
+
+      <!-- Section Header -->
+      <div class="flex items-center gap-4 mb-10 sm:mb-14">
+        <span class="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-accent-red">03</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink">Contact</h2>
+        <div class="flex-1 border-t border-ink/20"></div>
+      </div>
+
+      <!-- Oversized Email + CTA -->
+      <div class="border-2 border-ink bg-white p-8 sm:p-12 sm:p-16 text-center">
+        <p class="font-sans text-sm sm:text-base text-ink-muted mb-6 sm:mb-8 max-w-lg mx-auto leading-relaxed">
+          I'm currently open to freelance projects and full-time collaborations.
+          If you have a project that needs clean architecture and polished execution,
+          let's talk.
+        </p>
+
+        <a
+          href="mailto:abdunnasir.dev@gmail.com"
+          class="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-accent-red hover:text-ink transition-colors break-all"
+        >
+          abdunnasir.dev@gmail.com
+        </a>
+
+        <!-- Social links -->
+        <div class="mt-10 sm:mt-12 flex justify-center items-center gap-8">
+          <a href="https://github.com/nashirru" target="_blank" rel="noopener noreferrer"
+            class="font-sans text-sm font-semibold text-ink-muted hover:text-ink transition-colors uppercase tracking-wider">
+            GitHub
+          </a>
+          <span class="text-ink-light">/</span>
+          <a href="#" target="_blank" rel="noopener noreferrer"
+            class="font-sans text-sm font-semibold text-ink-muted hover:text-ink transition-colors uppercase tracking-wider">
+            LinkedIn
+          </a>
+          <span class="text-ink-light">/</span>
+          <a href="#" target="_blank" rel="noopener noreferrer"
+            class="font-sans text-sm font-semibold text-ink-muted hover:text-ink transition-colors uppercase tracking-wider">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t-2 border-ink">
+    <div class="max-w-[1200px] mx-auto px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-xs sm:text-sm text-ink-muted font-sans">
+        &copy; 2026 Muhammad Abdun Nasir. All rights reserved.
+      </p>
+      <p class="text-xs text-ink-muted/60 font-sans">
+        Designed &amp; built with intention — Laravel, React, Tailwind CSS
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

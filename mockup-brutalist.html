@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nasir · Anti-Slop Architecture</title>
+
+  <!-- Google Fonts: Bebas Neue (display) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brutal: {
+              black: '#0A0A0A',
+              white: '#FFFFFF',
+              yellow: '#FFE600',
+              pink: '#FF3366',
+              blue: '#0055FF',
+            },
+          },
+          fontFamily: {
+            display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #FFFFFF;
+      color: #0A0A0A;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: #FFE600; color: #0A0A0A; }
+    :focus-visible { outline: 3px solid #FF3366; outline-offset: 2px; }
+    .skip-link {
+      position: absolute; top: -100%; left: 50%; z-index: 100;
+      padding: 0.5rem 1rem; background: #FF3366; color: #fff;
+      font-weight: 700; transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Marquee */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex; width: max-content;
+      animation: marquee 20s linear infinite;
+    }
+    .animate-marquee:hover { animation-play-state: paused; }
+
+    /* Split text animation */
+    .split-word {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+    }
+    .split-word-inner {
+      display: inline-block;
+      transform: translateY(110%) rotateZ(5deg);
+      opacity: 0;
+      animation: splitReveal 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    }
+    @keyframes splitReveal {
+      to { transform: translateY(0) rotateZ(0); opacity: 1; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#work" class="skip-link">Skip to work</a>
+
+  <!-- ==================== NAV ==================== -->
+  <nav class="sticky top-0 z-50 bg-brutal-white border-b-4 border-brutal-black">
+    <div class="max-w-[1280px] mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
+      <a href="#" class="font-display text-2xl sm:text-3xl tracking-wider text-brutal-black">
+        NASIR<span class="text-brutal-pink">.</span>
+      </a>
+
+      <div class="hidden sm:flex items-center gap-8 font-sans font-bold text-sm uppercase tracking-wider">
+        <a href="#work" class="text-brutal-black hover:text-brutal-blue transition-colors">Work</a>
+        <a href="#manifesto" class="text-brutal-black hover:text-brutal-pink transition-colors">Manifesto</a>
+        <a href="#contact" class="text-brutal-black hover:text-brutal-pink transition-colors">Contact</a>
+        <a href="#contact"
+          class="ml-2 px-6 py-2.5 bg-brutal-yellow border-4 border-brutal-black text-brutal-black font-black text-sm shadow-[4px_4px_0px_0px_#0A0A0A] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
+        >
+          Hire Me
+        </a>
+      </div>
+
+      <button
+        class="sm:hidden p-2 border-4 border-brutal-black"
+        onclick="document.getElementById('mobile-nav').classList.toggle('hidden')"
+        aria-label="Menu"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="4" stroke-linecap="square">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-nav" class="hidden sm:hidden border-t-4 border-brutal-black bg-brutal-white">
+      <div class="px-6 py-6 flex flex-col gap-2">
+        <a href="#work" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="text-2xl font-black uppercase py-2 border-b-2 border-brutal-black/20">Work</a>
+        <a href="#manifesto" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="text-2xl font-black uppercase py-2 border-b-2 border-brutal-black/20">Manifesto</a>
+        <a href="#contact" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="text-2xl font-black uppercase py-2 border-b-2 border-brutal-black/20">Contact</a>
+        <a href="#contact" onclick="document.getElementById('mobile-nav').classList.add('hidden')"
+          class="mt-4 text-center py-4 bg-brutal-yellow border-4 border-brutal-black font-black uppercase text-lg">
+          Hire Me
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="max-w-[1280px] mx-auto px-6 pt-16 sm:pt-24 pb-20 sm:pb-32 min-h-[80vh] flex flex-col justify-center">
+
+      <!-- Status badge -->
+      <div class="mb-8 inline-flex items-center gap-2 bg-brutal-blue text-white px-4 py-2 border-4 border-brutal-black font-sans font-bold text-xs uppercase tracking-wider shadow-[4px_4px_0px_0px_#0A0A0A]">
+        <span class="w-2 h-2 bg-brutal-yellow rounded-full"></span>
+        Status: Open for projects
+      </div>
+
+      <!-- Massive headline with split animation -->
+      <h1 class="font-display text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] leading-[0.85] tracking-tight text-brutal-black">
+        <div class="overflow-hidden">
+          <span class="inline-block split-word-inner" style="animation-delay: 0s">I</span>
+        </div>
+        <div class="overflow-hidden">
+          <span class="inline-block split-word-inner" style="animation-delay: 0.1s">BUILD</span>
+        </div>
+        <div class="overflow-hidden">
+          <span class="inline-block split-word-inner" style="animation-delay: 0.2s">WEBSITES</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-4 sm:gap-8 mt-2">
+          <div class="overflow-hidden">
+            <span class="inline-block split-word-inner" style="animation-delay: 0.3s">THAT</span>
+          </div>
+          <div class="overflow-hidden">
+            <span class="inline-block split-word-inner" style="animation-delay: 0.35s">ARE</span>
+          </div>
+          <span
+            class="inline-block bg-brutal-yellow px-4 sm:px-6 py-1 sm:py-2 -rotate-2 border-4 border-brutal-black text-5xl sm:text-8xl md:text-[9rem] font-display leading-none shadow-[8px_8px_0px_0px_#0A0A0A]"
+            style="animation: splitReveal 0.6s cubic-bezier(0.76,0,0.24,1) 0.4s forwards; opacity: 0; transform: translateY(110%) rotateZ(5deg);"
+          >
+            RAW.
+          </span>
+        </div>
+      </h1>
+
+      <!-- Tagline -->
+      <p class="max-w-3xl text-lg sm:text-xl md:text-2xl font-sans font-medium leading-relaxed mt-10 sm:mt-12 border-l-8 border-brutal-pink pl-6">
+        No generic templates. No floating 3D laptops. No AI slop.
+        Just brutally fast, highly functional, and structurally sound web experiences.
+      </p>
+
+      <!-- CTAs -->
+      <div class="mt-12 sm:mt-16 flex flex-wrap items-center gap-6">
+        <a href="#work"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-brutal-black text-white border-4 border-brutal-black font-sans font-bold text-lg uppercase tracking-wide shadow-[8px_8px_0px_0px_#0A0A0A] hover:bg-brutal-pink hover:text-brutal-black hover:shadow-none hover:-translate-y-1 hover:translate-x-1 transition-all"
+        >
+          View Projects
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="https://github.com/nashirru" target="_blank" rel="noopener noreferrer"
+          class="p-4 border-4 border-brutal-black bg-brutal-white text-brutal-black shadow-[4px_4px_0px_0px_#0A0A0A] hover:bg-brutal-yellow hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- ==================== MARQUEE ==================== -->
+    <div class="border-y-4 border-brutal-black bg-brutal-yellow py-5 overflow-hidden">
+      <div class="animate-marquee font-display text-3xl sm:text-4xl md:text-5xl uppercase tracking-widest text-brutal-black">
+        <div class="flex items-center gap-12">
+          <span>ANTI-SLOP ARCHITECTURE</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>HIGH CONTRAST</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>STRUCTURAL INTEGRITY</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>ACCESSIBLE BY DEFAULT</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>PERFORMANCE BUDGET</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>ANTI-SLOP ARCHITECTURE</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>HIGH CONTRAST</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>STRUCTURAL INTEGRITY</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>ACCESSIBLE BY DEFAULT</span>
+          <span class="text-brutal-pink">✦</span>
+          <span>PERFORMANCE BUDGET</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== WORK ==================== -->
+    <section id="work" class="max-w-[1280px] mx-auto px-6 py-20 sm:py-28">
+
+      <!-- Section header -->
+      <div class="flex items-center gap-4 mb-12 sm:mb-16">
+        <span class="font-sans text-xs font-black tracking-[0.2em] text-brutal-pink">01</span>
+        <h2 class="font-display text-5xl sm:text-7xl md:text-8xl uppercase tracking-tight text-brutal-black leading-none">Selected Work</h2>
+        <div class="flex-1 border-t-4 border-brutal-black"></div>
+      </div>
+
+      <!-- Projects grid: 2-col asymmetric -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+
+        <!-- Card 1: Cashflow -->
+        <div class="sm:col-span-1 sm:row-span-2 flex flex-col border-4 border-brutal-black bg-brutal-white p-6 sm:p-8 shadow-[8px_8px_0px_0px_#0A0A0A] hover:shadow-[16px_16px_0px_0px_#0A0A0A] hover:-translate-y-1 hover:translate-x-1 transition-all">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <span class="font-sans text-xs font-black uppercase tracking-widest text-brutal-blue bg-brutal-white px-2 border-2 border-brutal-blue">SaaS</span>
+            <a href="#" class="font-sans text-sm font-bold uppercase text-brutal-black hover:text-brutal-pink transition-colors">
+              View <span class="inline-block ml-1">→</span>
+            </a>
+          </div>
+          <h3 class="font-display text-3xl sm:text-4xl md:text-5xl uppercase leading-tight text-brutal-black mb-4">
+            Warok Cashflow<br />Dashboard
+          </h3>
+          <p class="font-sans text-sm sm:text-base text-brutal-black/70 leading-relaxed mb-8 flex-1">
+            Financial management SaaS for SMEs. Real-time cash flow monitoring with
+            interactive data visualization. Handles 500+ transactions monthly with
+            automated reconciliation.
+          </p>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black bg-brutal-yellow">Laravel</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">React</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">MySQL</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">Tailwind</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Absen -->
+        <div class="flex flex-col border-4 border-brutal-black bg-brutal-white p-6 sm:p-8 shadow-[8px_8px_0px_0px_#0A0A0A] hover:shadow-[16px_16px_0px_0px_#0A0A0A] hover:-translate-y-1 hover:translate-x-1 transition-all">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <span class="font-sans text-xs font-black uppercase tracking-widest text-brutal-pink bg-brutal-white px-2 border-2 border-brutal-pink">Enterprise</span>
+            <a href="#" class="font-sans text-sm font-bold uppercase text-brutal-black hover:text-brutal-pink transition-colors">
+              View <span class="inline-block ml-1">→</span>
+            </a>
+          </div>
+          <h3 class="font-display text-2xl sm:text-3xl md:text-4xl uppercase leading-tight text-brutal-black mb-3">
+            ASA Absen Portal
+          </h3>
+          <p class="font-sans text-sm sm:text-base text-brutal-black/70 leading-relaxed mb-6 flex-1">
+            Geolocation-based attendance with dynamic QR validation. 1,000+ daily check-ins across multiple locations.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black bg-brutal-yellow">Laravel</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">PHP</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">MySQL</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">Tailwind</span>
+          </div>
+        </div>
+
+        <!-- Card 3: PNOM -->
+        <div class="flex flex-col border-4 border-brutal-black bg-brutal-white p-6 sm:p-8 shadow-[8px_8px_0px_0px_#0A0A0A] hover:shadow-[16px_16px_0px_0px_#0A0A0A] hover:-translate-y-1 hover:translate-x-1 transition-all">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <span class="font-sans text-xs font-black uppercase tracking-widest text-brutal-yellow bg-brutal-black px-2 border-2 border-brutal-black">CMS</span>
+            <a href="#" class="font-sans text-sm font-bold uppercase text-brutal-black hover:text-brutal-pink transition-colors">
+              View <span class="inline-block ml-1">→</span>
+            </a>
+          </div>
+          <h3 class="font-display text-2xl sm:text-3xl md:text-4xl uppercase leading-tight text-brutal-black mb-3">
+            PNOM CMS Gallery
+          </h3>
+          <p class="font-sans text-sm sm:text-base text-brutal-black/70 leading-relaxed mb-6 flex-1">
+            Content management system with interactive gallery. Dynamic media with drag-and-drop organization.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">React</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">Vite</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">Framer</span>
+            <span class="px-3 py-1.5 text-xs font-bold border-2 border-brutal-black">Tailwind</span>
+          </div>
+        </div>
+
+        <!-- Card 4: CTA -->
+        <div class="flex flex-col items-center justify-center text-center border-4 border-brutal-black bg-brutal-black p-6 sm:p-8 shadow-[8px_8px_0px_0px_#0A0A0A] hover:shadow-[16px_16px_0px_0px_#0A0A0A] hover:-translate-y-1 hover:translate-x-1 transition-all">
+          <p class="font-display text-2xl sm:text-3xl md:text-4xl uppercase text-brutal-yellow leading-tight mb-4">
+            Have a project?
+          </p>
+          <p class="font-sans text-sm sm:text-base text-white/60 mb-6 max-w-xs">
+            Available for freelance and collaborations. Let's build something structurally sound.
+          </p>
+          <a href="#contact"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-brutal-yellow border-2 border-brutal-yellow text-brutal-black font-black uppercase text-sm hover:bg-transparent hover:text-brutal-yellow transition-colors"
+          >
+            Let's Talk
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MANIFESTO ==================== -->
+    <section id="manifesto" class="bg-brutal-black text-white border-y-4 border-brutal-black">
+      <div class="max-w-[1280px] mx-auto px-6 py-20 sm:py-28">
+
+        <!-- Section header -->
+        <div class="flex items-center gap-4 mb-12 sm:mb-16">
+          <span class="font-sans text-xs font-black tracking-[0.2em] text-brutal-pink">02</span>
+          <h2 class="font-display text-5xl sm:text-7xl md:text-8xl uppercase tracking-tight text-brutal-yellow leading-none">The Manifesto</h2>
+          <div class="flex-1 border-t-4 border-white/20"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16">
+
+          <!-- Left: Text -->
+          <div class="space-y-8 text-lg sm:text-xl leading-relaxed font-sans font-medium text-white/80">
+            <p>
+              The web has become a sea of sameness. Soft gradients, rounded corners,
+              and predictable layouts generated by machines, for machines.
+            </p>
+            <p>
+              I believe in <strong class="bg-brutal-yellow text-brutal-black px-2 border-2 border-transparent font-black">structural integrity</strong>
+              over superficial polish. A website is a tool, not a painting.
+              Every pixel should earn its place.
+            </p>
+            <p>
+              My code is semantic, my performance budgets are strict, and my designs
+              are engineered to demand attention — not beg for it.
+            </p>
+            <p class="font-display text-3xl sm:text-4xl uppercase text-brutal-yellow leading-tight pt-4">
+              No templates. No trends. Just engineering.
+            </p>
+          </div>
+
+          <!-- Right: Stack -->
+          <div>
+            <h3 class="font-display text-3xl sm:text-4xl uppercase text-white border-b-4 border-white pb-3 mb-6">Core Stack</h3>
+            <div class="flex flex-wrap gap-3">
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                TypeScript
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                React / Next.js
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                Laravel
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                Tailwind CSS
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                Framer Motion
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                Node.js
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                MySQL
+              </span>
+              <span class="px-5 py-3 border-2 border-brutal-yellow text-brutal-yellow font-sans font-bold text-lg uppercase hover:bg-brutal-yellow hover:text-brutal-black transition-colors cursor-default">
+                Web A11y
+              </span>
+            </div>
+
+            <!-- Quick stats -->
+            <div class="mt-10 grid grid-cols-2 gap-4 sm:gap-6">
+              <div class="border-2 border-white/20 p-4">
+                <p class="font-display text-4xl sm:text-5xl text-brutal-yellow">5+</p>
+                <p class="font-sans text-xs font-bold uppercase text-white/50 tracking-wider mt-1">Years Building</p>
+              </div>
+              <div class="border-2 border-white/20 p-4">
+                <p class="font-display text-4xl sm:text-5xl text-brutal-yellow">20+</p>
+                <p class="font-sans text-xs font-bold uppercase text-white/50 tracking-wider mt-1">Projects Shipped</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT / FOOTER ==================== -->
+    <section id="contact" class="bg-brutal-yellow border-b-4 border-brutal-black">
+      <div class="max-w-[1280px] mx-auto px-6 py-20 sm:py-28 text-center relative overflow-hidden">
+
+        <!-- Vertical structural lines -->
+        <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+          <div class="hidden md:block absolute top-0 left-[15%] w-0 h-full border-l-4 border-brutal-black/20"></div>
+          <div class="hidden md:block absolute top-0 right-[15%] w-0 h-full border-l-4 border-brutal-black/20"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto">
+          <p class="font-sans text-sm font-black uppercase tracking-[0.2em] text-brutal-black/60 mb-6">
+            Let's build something
+          </p>
+          <h2 class="font-display text-6xl sm:text-8xl md:text-[8rem] uppercase leading-[0.85] text-brutal-black mb-8">
+            Structurally<br />
+            <span class="inline-block bg-brutal-black text-brutal-yellow px-4 -rotate-1 border-4 border-brutal-black shadow-[8px_8px_0px_0px_#0A0A0A] mt-2">
+              Sound
+            </span>
+          </h2>
+
+          <a
+            href="mailto:abdunnasir.dev@gmail.com"
+            class="inline-block mt-10 font-display text-3xl sm:text-5xl md:text-6xl uppercase text-brutal-black border-b-4 border-brutal-black hover:text-brutal-pink hover:border-brutal-pink transition-all break-all"
+          >
+            abdunnasir.dev@gmail.com
+          </a>
+
+          <div class="mt-16 flex justify-center items-center gap-8">
+            <a href="https://github.com/nashirru" target="_blank" rel="noopener noreferrer"
+              class="flex items-center gap-2 font-sans font-bold uppercase text-sm text-brutal-black hover:text-brutal-pink transition-colors border-b-2 border-transparent hover:border-brutal-pink">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub
+            </a>
+            <span class="w-2 h-2 bg-brutal-black/30"></span>
+            <a href="#"
+              class="flex items-center gap-2 font-sans font-bold uppercase text-sm text-brutal-black hover:text-brutal-pink transition-colors border-b-2 border-transparent hover:border-brutal-pink">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <span class="w-2 h-2 bg-brutal-black/30"></span>
+            <a href="#"
+              class="flex items-center gap-2 font-sans font-bold uppercase text-sm text-brutal-black hover:text-brutal-pink transition-colors border-b-2 border-transparent hover:border-brutal-pink">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-brutal-white border-t-4 border-brutal-black">
+    <div class="max-w-[1280px] mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="font-sans text-xs font-bold uppercase text-brutal-black/50 tracking-wider">
+        &copy; 2026 Muhammad Abdun Nasir
+      </p>
+      <p class="font-sans text-xs font-bold uppercase text-brutal-black/30 tracking-wider">
+        Built with React · Laravel · Tailwind · Framer Motion
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

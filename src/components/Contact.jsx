@@ -1,203 +1,200 @@
 import { motion } from 'framer-motion';
-import { Mail, Github, Linkedin, MessageSquare, Send, MapPin } from 'lucide-react';
+import { Github, Linkedin, Mail, MessageSquare, ArrowUpRight, Terminal } from 'lucide-react';
+import AnimatedScribble from './ui/AnimatedScribble';
+
+const fadeUp = {
+  initial: { opacity: 0, y: 12 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.4, ease: 'easeOut' },
+};
 
 export default function Contact() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // In a production environment, this would handle form submission
-    alert('Thank you! Your message has been sent successfully (Mockup Action).');
-  };
-
   return (
-    <section id="contact" className="py-20 relative overflow-hidden z-10">
-      {/* Background ambient glow */}
-      <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] rounded-full bg-accent-purple/5 blur-[160px] pointer-events-none" />
+    <section
+      id="contact"
+      aria-label="Contact"
+      className="py-[80px] lg:py-[100px] border-t border-black/10 relative overflow-hidden"
+    >
+      {/* Floating yellow accents */}
+      <motion.div
+        className="absolute top-10 left-[20%] w-2 h-2 bg-brutal-yellow/20 rotate-45"
+        animate={{ y: [-8, 8, -8], rotate: [45, 60, 45] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        aria-hidden="true"
+      />
+      <motion.div
+        className="absolute bottom-20 right-[15%] w-1.5 h-1.5 bg-brutal-yellow/25 rounded-full"
+        animate={{ y: [8, -8, 8], opacity: [0.15, 0.5, 0.15] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        aria-hidden="true"
+      />
+      <motion.div
+        className="absolute top-1/2 right-[10%] w-1 h-1 bg-brutal-pink/15 rounded-full"
+        animate={{ scale: [1, 2, 1], opacity: [0.15, 0.35, 0.15] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        aria-hidden="true"
+      />
 
-      <div className="max-w-[1280px] mx-auto px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+      {/* Yellow diagonal accent */}
+      <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-brutal-yellow/3 rotate-45 pointer-events-none" aria-hidden="true" />
+
+      <div className="max-w-[1200px] mx-auto px-8 lg:px-12">
+        <div className="max-w-2xl">
+          {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-glass-border bg-glass-fill backdrop-blur-md text-xs text-accent-cyan font-mono mb-4"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>Hubungi Saya</span>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="w-4 h-[2px] bg-brutal-yellow" />
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-black/30 font-semibold">
+                Connect
+              </span>
+            </div>
+            <div className="flex items-center gap-4 mt-1">
+              <h2 className="font-display text-5xl sm:text-7xl lg:text-8xl uppercase tracking-tight text-brutal-black leading-none">
+                Get in Touch
+              </h2>
+              <motion.div
+                className="h-[1px] flex-1 bg-black/10"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                style={{ transformOrigin: 'left' }}
+              />
+            </div>
           </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
+
+          {/* Terminal-inspired contact block */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] mb-4 font-sans tracking-tight"
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="border border-black/10 p-6 sm:p-8 font-mono text-sm bg-black/[0.02] mt-10 relative group"
           >
-            Let's Connect
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-[#A1A1AA] text-sm sm:text-base leading-relaxed max-w-xl mx-auto"
-          >
-            Mempunyai ide proyek menarik atau ingin berkolaborasi? Kirimkan pesan Anda di bawah ini.
-          </motion.p>
+            {/* Yellow top border */}
+            <motion.div className="absolute top-0 left-0 right-0 h-[2px] bg-brutal-yellow/0 group-hover:bg-brutal-yellow/30 transition-colors duration-300" />
+
+            {/* Prompt line */}
+            <div className="flex items-center gap-2 text-black/30 mb-6 pb-4 border-b border-black/5">
+              <Terminal className="w-3.5 h-3.5 text-brutal-yellow/40" strokeWidth={1.5} />
+              <span className="text-brutal-yellow font-semibold">$</span>
+              <motion.span
+                className="text-black/50"
+                animate={{ opacity: [1, 0.5, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                ./contact
+              </motion.span>
+              <motion.span
+                className="w-[3px] h-5 bg-brutal-yellow/60 inline-block"
+                animate={{ opacity: [1, 0.1, 1] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'steps(2)' }}
+              />
+            </div>
+
+            {/* Contact items */}
+            {[
+              {
+                icon: Mail,
+                href: 'mailto:abdunnasir.dev@gmail.com',
+                label: 'abdunnasir.dev@gmail.com',
+                meta: '— Primary',
+                delay: 0.1,
+              },
+              {
+                icon: Github,
+                href: 'https://github.com/nashirru',
+                label: 'github.com/nashirru',
+                meta: '— Open Source',
+                delay: 0.2,
+              },
+              {
+                icon: Linkedin,
+                href: '#',
+                label: 'linkedin.com/in/nashirru',
+                meta: '— Professional',
+                delay: 0.3,
+              },
+              {
+                icon: MessageSquare,
+                href: null,
+                label: '+62 8XX-XXXX-XXXX',
+                meta: '— WhatsApp',
+                delay: 0.4,
+              },
+            ].map((item) => {
+              const Icon = item.icon;
+              const content = (
+                <motion.div
+                  key={item.label}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: item.delay }}
+                  className="flex items-center gap-3 mb-4 group/item"
+                >
+                  <motion.div
+                    className="text-black/20 group-hover/item:text-brutal-yellow transition-colors shrink-0"
+                    whileHover={{ scale: 1.2, rotate: -5 }}
+                  >
+                    <Icon className="w-4 h-4" strokeWidth={1.5} />
+                  </motion.div>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-black/60 hover:text-brutal-black transition-colors text-sm"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <span className="text-black/40 text-sm">
+                      {item.label}
+                    </span>
+                  )}
+                  <span className="text-[10px] text-black/20 font-sans uppercase tracking-wider">
+                    {item.meta}
+                  </span>
+                </motion.div>
+              );
+              return content;
+            })}
+
+            {/* CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+              className="mt-8 pt-4 border-t border-black/5"
+            >
+              <motion.a
+                href="mailto:abdunnasir.dev@gmail.com"
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-brutal-black text-white text-[12px] font-sans font-semibold uppercase tracking-[0.12em] relative overflow-hidden group/btn"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <span className="absolute inset-0 bg-brutal-yellow translate-y-full group-hover/btn:translate-y-0 transition-transform duration-200" />
+                <span className="relative z-10 flex items-center gap-2.5 group-hover:text-brutal-black transition-colors duration-200">
+                  Start a Conversation
+                  <motion.span
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={1.5} />
+                  </motion.span>
+                </span>
+              </motion.a>
+            </motion.div>
+          </motion.div>
+
+          {/* Scribble accent */}
+          <AnimatedScribble variant={5} className="mt-8 opacity-20" />
         </div>
-
-        {/* Large Central Glass Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl mx-auto border border-glass-border bg-glass-fill backdrop-blur-xl rounded-[32px] p-8 md:p-12 shadow-2xl relative overflow-hidden group hover:border-accent-cyan/30 transition-all duration-500"
-        >
-          {/* Subtle inside card radial gradient glow */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-accent-cyan/10 blur-[80px] pointer-events-none group-hover:bg-accent-cyan/15 transition-all duration-500" />
-          
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
-            
-            {/* Left side: Contact Form */}
-            <div className="md:col-span-7">
-              <h3 className="text-xl font-bold text-[#FAFAFA] mb-8 tracking-tight font-sans">
-                Kirim Pesan
-              </h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="text-xs uppercase text-accent-cyan font-mono tracking-widest mb-1 block">
-                    Nama Lengkap
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    placeholder="Masukkan nama Anda"
-                    className="w-full bg-transparent border-b border-glass-border px-0 py-3 text-sm text-[#FAFAFA] placeholder:text-[#A1A1AA]/35 focus:outline-none focus:border-accent-cyan transition-colors duration-300 font-sans"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="text-xs uppercase text-accent-cyan font-mono tracking-widest mb-1 block">
-                    Alamat Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    placeholder="nama@email.com"
-                    className="w-full bg-transparent border-b border-glass-border px-0 py-3 text-sm text-[#FAFAFA] placeholder:text-[#A1A1AA]/35 focus:outline-none focus:border-accent-cyan transition-colors duration-300 font-sans"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="text-xs uppercase text-accent-cyan font-mono tracking-widest mb-1 block">
-                    Pesan Anda
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={4}
-                    placeholder="Tulis detail proyek atau pesan kolaborasi..."
-                    className="w-full bg-transparent border-b border-glass-border px-0 py-3 text-sm text-[#FAFAFA] placeholder:text-[#A1A1AA]/35 focus:outline-none focus:border-accent-cyan transition-colors duration-300 font-sans h-28 resize-none"
-                  />
-                </div>
-
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#FAFAFA] text-[#09090B] font-semibold text-sm rounded-xl px-6 py-3.5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.35)] active:scale-95 cursor-pointer font-sans"
-                  >
-                    <span>Send Message</span>
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            {/* Right side: Contact Info & Socials */}
-            <div className="md:col-span-5 flex flex-col justify-between border-t md:border-t-0 md:border-l border-glass-border pt-10 md:pt-0 md:pl-10">
-              <div>
-                <h3 className="text-xl font-bold text-[#FAFAFA] mb-8 tracking-tight font-sans">
-                  Info Kontak
-                </h3>
-                <div className="space-y-6">
-                  {/* Location info */}
-                  <div className="flex items-center gap-4 group/item">
-                    <div className="w-10 h-10 rounded-lg border border-glass-border bg-white/[0.02] flex items-center justify-center text-accent-cyan">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-[11px] uppercase text-[#A1A1AA] font-mono tracking-widest">Lokasi</h4>
-                      <p className="text-sm text-[#FAFAFA] font-sans">Jawa Timur, Indonesia</p>
-                    </div>
-                  </div>
-
-                  {/* Email info */}
-                  <div className="flex items-center gap-4 group/item">
-                    <div className="w-10 h-10 rounded-lg border border-glass-border bg-white/[0.02] flex items-center justify-center text-accent-cyan">
-                      <Mail className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-[11px] uppercase text-[#A1A1AA] font-mono tracking-widest">Email</h4>
-                      <a href="mailto:abdunnasir.dev@gmail.com" className="text-sm text-[#FAFAFA] hover:text-accent-cyan transition-colors font-sans">
-                        abdunnasir.dev@gmail.com
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Social Links */}
-              <div className="mt-10 md:mt-0">
-                <h4 className="text-xs uppercase text-accent-cyan font-mono tracking-widest mb-4">
-                  Temukan Saya
-                </h4>
-                <div className="flex items-center gap-4">
-                  {/* GitHub */}
-                  <a
-                    href="https://github.com/nashirru"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-xl border border-glass-border bg-white/[0.01] flex items-center justify-center text-[#A1A1AA] hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300"
-                    title="GitHub"
-                  >
-                    <Github className="w-5 h-5" />
-                  </a>
-
-                  {/* LinkedIn */}
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-xl border border-glass-border bg-white/[0.01] flex items-center justify-center text-[#A1A1AA] hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300"
-                    title="LinkedIn"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-
-                  {/* WhatsApp */}
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-xl border border-glass-border bg-white/[0.01] flex items-center justify-center text-[#A1A1AA] hover:text-accent-cyan hover:border-accent-cyan/50 transition-all duration-300"
-                    title="WhatsApp"
-                  >
-                    <MessageSquare className="w-5 h-5" />
-                  </a>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </motion.div>
-
       </div>
     </section>
   );

@@ -1,145 +1,154 @@
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, FolderKanban } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { projectsData } from '../data/projects';
 
+const tagVariants = {
+  laravel: 'bg-brutal-yellow',
+  default: 'bg-transparent',
+};
+
+function getTagStyle(tag) {
+  const lower = tag.toLowerCase();
+  if (lower === 'laravel') return 'bg-brutal-yellow';
+  if (lower === 'react' || lower === 'next.js') return 'bg-brutal-blue/10 text-brutal-blue border-brutal-blue/40';
+  return 'bg-transparent';
+}
+
+const projectExtras = [
+  {
+    label: 'SaaS',
+    labelColor: 'text-brutal-blue border-brutal-blue',
+    stat: '500+ transactions/mo',
+  },
+  {
+    label: 'Enterprise',
+    labelColor: 'text-brutal-pink border-brutal-pink',
+    stat: '1,000+ daily check-ins',
+  },
+  {
+    label: 'CMS',
+    labelColor: 'text-brutal-yellow bg-brutal-black border-brutal-black',
+    stat: '200+ portfolios hosted',
+  },
+];
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.76, 0, 0.24, 1] },
+  },
+};
+
 export default function Works() {
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    }
-  };
-
   return (
-    <section id="works" className="py-20 relative overflow-hidden z-10">
-      {/* Background radial glow */}
-      <div className="absolute top-[40%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-accent-cyan/5 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-15%] w-[45vw] h-[45vw] rounded-full bg-accent-purple/5 blur-[150px] pointer-events-none" />
+    <section id="work" aria-label="Selected work" className="max-w-[1280px] mx-auto px-6 py-20 sm:py-28">
+      {/* Section Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="flex items-center gap-4 mb-12 sm:mb-16"
+      >
+        <span className="font-sans text-xs font-black tracking-[0.2em] text-brutal-pink">01</span>
+        <h2 className="font-display text-5xl sm:text-7xl md:text-8xl uppercase tracking-tight text-brutal-black leading-none">
+          Selected Work
+        </h2>
+        <div className="flex-1 border-t-4 border-brutal-black" />
+      </motion.div>
 
-      <div className="max-w-[1280px] mx-auto px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-glass-border bg-glass-fill backdrop-blur-md text-xs text-accent-cyan font-mono mb-4"
-          >
-            <FolderKanban className="w-3.5 h-3.5" />
-            <span>Portofolio Saya</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl font-extrabold text-[#FAFAFA] mb-4 font-sans tracking-tight"
-          >
-            Selected Works
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-[#A1A1AA] text-sm sm:text-base leading-relaxed max-w-xl mx-auto"
-          >
-            Menampilkan deretan aplikasi web terbaik yang dirancang dengan performa tinggi dan pengalaman pengguna yang luar biasa.
-          </motion.p>
-        </div>
+      {/* Projects Grid */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8"
+      >
+        {projectsData.map((project, index) => {
+          const extra = projectExtras[index] || projectExtras[0];
+          const isFirst = index === 0;
 
-        {/* Projects Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          {projectsData.map((project, index) => (
-            <motion.div
+          return (
+            <motion.article
               key={index}
               variants={cardVariants}
-              className="group relative h-full flex flex-col justify-between p-6 border border-glass-border bg-glass-fill backdrop-blur-xl rounded-[24px] hover:border-accent-cyan/40 hover:bg-white/[0.03] transition-all duration-300"
+              className={`flex flex-col border-4 border-brutal-black bg-brutal-white p-6 sm:p-8 shadow-brutal hover:shadow-brutal-lg hover:-translate-y-0.5 hover:translate-x-0.5 transition-all duration-200 ${
+                isFirst ? 'sm:row-span-2' : ''
+              }`}
             >
-              <div>
-                {/* Project Image Container */}
-                <div className="relative overflow-hidden rounded-xl aspect-[16/10] mb-6">
-                  {/* Subtle dark gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#09090B]/60 via-transparent to-transparent z-10 pointer-events-none" />
-                  
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transform scale-100 group-hover:scale-[1.04] transition-transform duration-500"
-                    loading="lazy"
-                  />
-                </div>
-
-                {/* Project Header & Links */}
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <h3 className="text-xl font-bold text-[#FAFAFA] tracking-tight group-hover:text-accent-cyan transition-colors duration-300 font-sans">
-                    {project.title}
-                  </h3>
-                  <div className="flex items-center gap-3 text-[#A1A1AA]">
-                    <a
-                      href={project.githubUrl}
-                      className="hover:text-accent-cyan transition-colors"
-                      title="View GitHub Repository"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Github className="w-5 h-5" />
-                    </a>
-                    <a
-                      href={project.liveUrl}
-                      className="hover:text-accent-cyan transition-colors"
-                      title="View Live Demo"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="w-5 h-5" />
-                    </a>
-                  </div>
-                </div>
-
-                {/* Project Description */}
-                <p className="text-sm text-[#A1A1AA] leading-relaxed mb-6 font-sans">
-                  {project.description}
-                </p>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <span
+                  className={`font-sans text-xs font-black uppercase tracking-widest px-2 border-2 ${extra.labelColor}`}
+                >
+                  {extra.label}
+                </span>
+                <a
+                  href={project.githubUrl || '#'}
+                  className="font-sans text-sm font-bold uppercase text-brutal-black hover:text-brutal-pink transition-colors flex items-center gap-1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View ${project.title}`}
+                >
+                  View <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
               </div>
 
-              {/* Technology Badges */}
+              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl uppercase leading-tight text-brutal-black mb-4">
+                {project.title}
+              </h3>
+
+              <p className="font-sans text-sm sm:text-base text-brutal-black/70 leading-relaxed mb-4 flex-1">
+                {project.description}
+              </p>
+
+              {extra.stat && (
+                <p className="font-sans text-xs font-bold uppercase text-brutal-pink tracking-wider mb-6">
+                  {extra.stat}
+                </p>
+              )}
+
+              {/* Tech tags */}
               <div className="flex flex-wrap gap-2 mt-auto">
                 {project.tags.map((tag, tagIndex) => (
                   <span
                     key={tagIndex}
-                    className="text-[11px] px-2.5 py-1 rounded-full border border-white/5 bg-white/[0.02] text-[#A1A1AA] font-mono"
+                    className={`px-3 py-1.5 text-xs font-bold border-2 border-brutal-black ${getTagStyle(tag)}`}
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            </motion.article>
+          );
+        })}
 
-      </div>
+        {/* CTA Card — "Have a project?" */}
+        <motion.article
+          variants={cardVariants}
+          className="flex flex-col items-center justify-center text-center border-4 border-brutal-black bg-brutal-black p-6 sm:p-8 shadow-brutal hover:shadow-brutal-lg hover:-translate-y-0.5 hover:translate-x-0.5 transition-all duration-200"
+        >
+          <p className="font-display text-3xl sm:text-4xl uppercase text-brutal-yellow leading-tight mb-4">
+            Have a project?
+          </p>
+          <p className="font-sans text-sm sm:text-base text-white/60 mb-6 max-w-xs">
+            Available for freelance and collaborations. Let&apos;s build something structurally sound.
+          </p>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-brutal-yellow border-2 border-brutal-yellow text-brutal-black font-black uppercase text-sm hover:bg-transparent hover:text-brutal-yellow transition-colors"
+          >
+            Let&apos;s Talk
+            <ArrowUpRight className="w-4 h-4" />
+          </a>
+        </motion.article>
+      </motion.div>
     </section>
   );
 }

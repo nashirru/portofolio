@@ -7,25 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bg-base': '#09090B',
-        'accent-cyan': '#06B6D4',
-        'accent-purple': '#8B5CF6',
-        'text-primary': '#FAFAFA',
-        'text-secondary': '#A1A1AA',
-        'glass-fill': 'rgba(25, 25, 30, 0.4)',
-        'glass-border': 'rgba(255, 255, 255, 0.08)',
-        'glass-hover': 'rgba(255, 255, 255, 0.15)',
-        'success-emerald': '#10B981'
-      },
-      borderRadius: {
-        'glass-md': '12px',
-        'glass-xl': '24px',
-        'glass-2xl': '32px'
+        'brutal-black': '#0A0A0A',
+        'brutal-white': '#FFFFFF',
+        'brutal-yellow': '#FFE600',
+        'brutal-pink': '#FF3366',
+        'brutal-blue': '#0055FF',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-      }
+        display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'brutal': '8px 8px 0px 0px #0A0A0A',
+        'brutal-lg': '16px 16px 0px 0px #0A0A0A',
+        'brutal-sm': '4px 4px 0px 0px #0A0A0A',
+      },
     },
   },
   plugins: [],
-}
+};
